@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Building Location Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+    }
+
+    .card {
+      width: 400px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    #status {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .green {
+      color: green;
+    }
+
+    .red {
+      color: red;
+    }
+
+    .orange {
+      color: orange;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Building Geo-Fence Validation</h2>
+
+    <p id="status">Checking location...</p>
+    <p id="distance"></p>
+    <p id="accuracy"></p>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
