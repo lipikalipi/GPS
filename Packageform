@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Package Creator | Service Selection Form</title>
+    <!-- Google Fonts & simple CSS reset -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <!-- Font Awesome 6 (free icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fc 0%, #eef2f8 100%);
+            font-family: 'Inter', sans-serif;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* main form card */
+        .form-card {
+            max-width: 680px;
+            width: 100%;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 32px;
+            box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.2), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .form-header {
+            background: #1e293b;
+            padding: 1.6rem 2rem;
+            color: white;
+        }
+
+        .form-header h1 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-header h1 i {
+            font-size: 1.8rem;
+            color: #a5f3fc;
+        }
+
+        .form-header p {
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            margin-top: 8px;
+        }
+
+        .form-body {
+            padding: 2rem 2rem 2rem 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        label i {
+            color: #3b82f6;
+            font-size: 1rem;
+            width: 20px;
+        }
+
+        .required-star {
+            color: #ef4444;
+            margin-left: 4px;
+            font-size: 0.8rem;
+        }
+
+        input, .custom-dropdown-trigger {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 0.95rem;
+            font-family: 'Inter', monospace;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 18px;
+            transition: all 0.2s;
+            background: #fafcff;
+            color: #0f172a;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+            background: white;
+        }
+
+        /* custom dropdown (multi-select style) */
+        .dropdown-wrapper {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+
+        .custom-dropdown-trigger {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: #ffffff;
+            gap: 8px;
+        }
+
+        .custom-dropdown-trigger .trigger-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: #334155;
+        }
+
+        .custom-dropdown-trigger .placeholder-text {
+            color: #94a3b8;
+        }
+
+        .dropdown-arrow {
+            font-size: 0.8rem;
+            transition: transform 0.2s;
+            color: #5b6e8c;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0,0,0,0.02);
+            z-index: 50;
+            max-height: 280px;
+            overflow-y: auto;
+            padding: 8px 0;
+            display: none;
+        }
+
+        .dropdown-menu.show {
+            display: block;
+            animation: fadeInDown 0.2s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: background 0.15s;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        .dropdown-item:hover {
+            background: #f1f5f9;
+        }
+
+        .dropdown-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+            accent-color: #3b82f6;
+            cursor: pointer;
+        }
+
+        .dropdown-item label {
+            margin: 0;
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            flex: 1;
+            color: #0f172a;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            min-height: 32px;
+        }
+
+        .service-badge {
+            background: #eef2ff;
+            color: #1e40af;
+            font-size: 0.75rem;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.1s;
+        }
+
+        .service-badge i {
+            font-size: 0.7rem;
+            cursor: pointer;
+            color: #3b82f6;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .service-badge i:hover {
+            opacity: 1;
+            color: #dc2626;
+        }
+
+        .error-message {
+            font-size: 0.75rem;
+            color: #ef4444;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-hint {
+            font-size: 0.7rem;
+            color: #5b6e8c;
+            margin-top: 6px;
+        }
+
+        hr {
+            margin: 1.5rem 0 1rem;
+            border: none;
+            border-top: 1px solid #e9eef3;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 16px;
+            margin-top: 28px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: #1e293b;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary:hover {
+            background: #0f172a;
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .success-toast {
+            visibility: hidden;
+            min-width: 260px;
+            background-color: #1e293b;
+            color: #fff;
+            text-align: center;
+            border-radius: 60px;
+            padding: 12px 24px;
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.2s, visibility 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(8px);
+            background: #0f172ae6;
+        }
+
+        .success-toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* scrollbar */
+        .dropdown-menu::-webkit-scrollbar {
+            width: 6px;
+        }
+        .dropdown-menu::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .dropdown-menu::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 550px) {
+            .form-body {
+                padding: 1.5rem;
+            }
+            .form-header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-card">
+    <div class="form-header">
+        <h1>
+            <i class="fas fa-cube"></i> 
+            Create Package
+        </h1>
+        <p>Define your service bundle, set pricing, and choose included services</p>
+    </div>
+    <div class="form-body">
+        <!-- Package Name -->
+        <div class="form-group">
+            <label>
+                <i class="fas fa-tag"></i> Package name
+                <span class="required-star">*</span>
+            </label>
+            <input type="text" id="packageName" placeholder="e.g., Premium SEO + Social Media" autocomplete="off">
+            <div class="error-message" id="nameError" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i> Name is required
+            </div>
+        </div>
+
+        <!-- Price -->
+        <div class="form-group">
+            <label>
+                <i class="fas fa-dollar-sign"></i> Price (USD)
+                <span class="required-star">*</span>
+            </label>
+            <input type="number" id="packagePrice" placeholder="0.00" step="any" min="0">
+            <div class="error-message" id="priceError" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i> Valid price is required
+            </div>
+            <div class="price-hint"><i class="fas fa-info-circle"></i> Enter base package price</div>
+        </div>
+
+        <!-- Services Dropdown (multi-select) -->
+        <div class="form-group">
+            <label>
+                <i class="fas fa-list-check"></i> Included services
+            </label>
+            <div class="dropdown-wrapper" id="dropdownWrapper">
+                <div class="custom-dropdown-trigger" id="dropdownTrigger">
+                    <span class="trigger-text" id="selectedText">Select services...</span>
+                    <i class="fas fa-chevron-down dropdown-arrow" id="dropdownArrow"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <!-- dynamic service items will be injected here from catalogService mock -->
+                    <div class="dropdown-item loading-item" style="justify-content: center; gap: 8px;">
+                        <i class="fas fa-spinner fa-pulse"></i> Loading services...
+                    </div>
+                </div>
+            </div>
+            <!-- selected badges area (below dropdown) -->
+            <div class="badge-container" id="badgeContainer"></div>
+            <div class="error-message" id="servicesEmptyError" style="display: none;">
+                <i class="fas fa-exclamation-circle"></i> At least one service is recommended (optional)
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="form-actions">
+            <button class="btn btn-secondary" id="resetBtn" type="button">
+                <i class="fas fa-undo-alt"></i> Reset
+            </button>
+            <button class="btn btn-primary" id="submitBtn">
+                <i class="fas fa-check-circle"></i> Create Package
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="toastMessage" class="success-toast">
+    <i class="fas fa-check-circle"></i> Package created successfully!
+</div>
+
+<script>
+    // -------------------------------
+    // MOCK SERVICES (catalogService)
+    // -------------------------------
+    // simulating CatalogService.getAll() that returns an observable
+    const MOCK_SERVICES = [
+        { id: "svc_101", name: "SEO Optimization", price: 299 },
+        { id: "svc_102", name: "Social Media Management", price: 199 },
+        { id: "svc_103", name: "Content Writing (5 articles)", price: 149 },
+        { id: "svc_104", name: "Email Marketing Setup", price: 89 },
+        { id: "svc_105", name: "PPC Campaign Audit", price: 399 },
+        { id: "svc_106", name: "Web Analytics Setup", price: 129 },
+        { id: "svc_107", name: "Graphic Design (3 assets)", price: 179 }
+    ];
+
+    // reference to DOM elements
+    const nameInput = document.getElementById('packageName');
+    const priceInput = document.getElementById('packagePrice');
+    const dropdownTrigger = document.getElementById('dropdownTrigger');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const dropdownArrow = document.getElementById('dropdownArrow');
+    const badgeContainer = document.getElementById('badgeContainer');
+    const selectedTextSpan = document.getElementById('selectedText');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const nameError = document.getElementById('nameError');
+    const priceError = document.getElementById('priceError');
+    const servicesEmptyError = document.getElementById('servicesEmptyError');
+
+    // selected services state (store full service objects)
+    let selectedServices = [];    // array of {id, name, price}
+    let allServices = [];         // original list from 'catalog'
+
+    // Helper to update UI: badges + dropdown items + trigger text + hidden form value (serviceIds)
+    function updateUIAfterSelection() {
+        // update badge container
+        badgeContainer.innerHTML = '';
+        if (selectedServices.length === 0) {
+            const emptyHint = document.createElement('span');
+            emptyHint.className = 'price-hint';
+            emptyHint.style.marginTop = '0';
+            emptyHint.innerHTML = '<i class="fas fa-info-circle"></i> No services selected yet';
+            badgeContainer.appendChild(emptyHint);
+        } else {
+            selectedServices.forEach(service => {
+                const badge = document.createElement('div');
+                badge.className = 'service-badge';
+                badge.innerHTML = `
+                    ${escapeHtml(service.name)}
+                    <i class="fas fa-times-circle" data-id="${service.id}" data-name="${escapeHtml(service.name)}"></i>
+                `;
+                badgeContainer.appendChild(badge);
+            });
+            // attach remove event to each remove icon
+            document.querySelectorAll('.service-badge i.fa-times-circle').forEach(icon => {
+                icon.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const serviceId = icon.getAttribute('data-id');
+                    removeServiceById(serviceId);
+                });
+            });
+        }
+
+        // update dropdown trigger text
+        if (selectedServices.length === 0) {
+            selectedTextSpan.innerHTML = '<span class="placeholder-text">Select services...</span>';
+            selectedTextSpan.classList.add('placeholder-text');
+        } else {
+            const names = selectedServices.map(s => s.name).slice(0, 2);
+            const remainder = selectedServices.length - 2;
+            let displayText = names.join(', ');
+            if (remainder > 0) displayText += ` +${remainder} more`;
+            selectedTextSpan.innerHTML = displayText;
+            selectedTextSpan.classList.remove('placeholder-text');
+        }
+
+        // update checkboxes in dropdown according to selectedServices
+        const checkboxes = dropdownMenu.querySelectorAll('.service-checkbox');
+        checkboxes.forEach(checkbox => {
+            const serviceId = checkbox.getAttribute('data-id');
+            const isChecked = selectedServices.some(s => s.id === serviceId);
+            checkbox.checked = isChecked;
+        });
+
+        // optional: clear services error if any
+        if (selectedServices.length > 0) {
+            servicesEmptyError.style.display = 'none';
+        }
+    }
+
+    function removeServiceById(id) {
+        selectedServices = selectedServices.filter(s => s.id !== id);
+        updateUIAfterSelection();
+    }
+
+    function addOrRemoveService(service, isChecked) {
+        if (isChecked) {
+            if (!selectedServices.some(s => s.id === service.id)) {
+                selectedServices.push(service);
+            }
+        } else {
+            selectedServices = selectedServices.filter(s => s.id !== service.id);
+        }
+        updateUIAfterSelection();
+    }
+
+    // build dropdown menu items dynamically from allServices
+    function renderDropdownItems() {
+        if (!dropdownMenu) return;
+        if (!allServices.length) {
+            dropdownMenu.innerHTML = `<div class="dropdown-item" style="justify-content:center;"><i class="fas fa-folder-open"></i> No services available</div>`;
+            return;
+        }
+        dropdownMenu.innerHTML = '';
+        allServices.forEach(service => {
+            const isChecked = selectedServices.some(s => s.id === service.id);
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'dropdown-item';
+            // checkbox
+            const check = document.createElement('input');
+            check.type = 'checkbox';
+            check.className = 'service-checkbox';
+            check.setAttribute('data-id', service.id);
+            check.checked = isChecked;
+            // label
+            const labelSpan = document.createElement('label');
+            labelSpan.textContent = service.name;
+            // optional price hint
+            const priceHintSpan = document.createElement('span');
+            priceHintSpan.style.fontSize = '0.7rem';
+            priceHintSpan.style.color = '#6c757d';
+            priceHintSpan.style.marginLeft = 'auto';
+            priceHintSpan.textContent = `$${service.price}`;
+
+            itemDiv.appendChild(check);
+            itemDiv.appendChild(labelSpan);
+            itemDiv.appendChild(priceHintSpan);
+
+            // event handler on checkbox change
+            check.addEventListener('change', (e) => {
+                e.stopPropagation();
+                addOrRemoveService(service, check.checked);
+            });
+            // clicking on div toggles checkbox
+            itemDiv.addEventListener('click', (e) => {
+                if (e.target !== check) {
+                    check.checked = !check.checked;
+                    addOrRemoveService(service, check.checked);
+                }
+            });
+            dropdownMenu.appendChild(itemDiv);
+        });
+    }
+
+    // load mock catalogService (simulating observable)
+    function loadServicesFromCatalog() {
+        // mimic async observable
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                // simulate CatalogService.getAll()
+                allServices = [...MOCK_SERVICES];
+                renderDropdownItems();
+                updateUIAfterSelection();
+                resolve(allServices);
+            }, 300);
+        });
+    }
+
+    // Helper: escapeHtml (safe)
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') ret
